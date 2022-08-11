@@ -1,0 +1,115 @@
+---
+title: "loops_and_functions"
+format: html
+editor: visual
+---
+
+## Quarto
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+animals <- c("pika", "frog", "pig", "bird")
+
+type <- c("small", "wet", "stinky", "avian", "big")
+
+
+an_mat <- matrix(nrow = length(animals), 
+                 ncol = length(type))
+
+for(i in seq_along(animals)) {
+  for(j in seq_along(type)) {
+    vec <- print(paste(type[j], animals[i]))
+    an_mat[i, j] <- vec
+  }
+}
+```
+
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+
+week_out <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+for(i in seq_along(weekdays)) {
+  for(j in seq_along(transects)) {
+    week <- print(paste(weekdays[i], "-", transects[j]))
+    week_out[i, j] <- week
+  }
+}
+
+```
+
+## task 2
+
+```{r}
+
+force <- function(mass, acceleration)
+  print(paste("The resulting force is", mass * acceleration, "Newtons."))
+
+force(mass = 15, acceleration = 2)
+```
+
+## task 3
+
+```{r}
+fish_params <- tribble(
+  ~sci_name, ~common_name, ~a_est, ~b_est,
+  "Chanos chanos", "Milkfish", 0.0905, 2.52,
+  "Sphyraena barracuda", "Great barracuda", 0.0181, 3.27,
+  "Caranx ignobilis", "Giant trevally", 0.0353, 3.05)
+  
+fish_params
+
+fish_weight <- function(fish_name, tot_length) {
+  subset <- filter(fish_params, common_name == fish_name)
+  W = subset$a_est * (tot_length) ^ subset$b_est
+  print(W)
+}
+
+fish_weight("Milkfish", 15)
+
+vec <- seq(from = 0, to = 100, by = 1)
+
+fish_weight("Milkfish", vec)
+```
+
+### task 4
+
+```{r}
+
+wave_power <- function(wave_height, period) {
+  power <- 0.5 * (wave_height) ^ 2 * period
+}
+
+v <- seq(from = 0, to = 3, by = 0.2)
+
+print(wave_power(v, 8))
+
+
+```
+
+### task 5
+
+```{r}
+shallow_power <- function(wave_height, period){
+  pwr <- 0.81 * (wave_height) ^ 2 * period
+}
+
+wave_eqn <- function(water_depth, wave_height, period) {
+  if(water_depth > 12) {
+    print(wave_power(wave_height, period))
+    message(paste("since the wave height is", wave_height, "meters, the deep water equation was used"))
+  }
+  else if(water_depth <=12) {
+    print(shallow_power(wave_height, period))
+    message(paste("since the wave height is", wave_height, "meters, the shallow wave equation was used"))
+  }
+}
+
+wave_eqn(water_depth = 15, wave_height = 1, period = 1)
+wave_eqn(water_depth = 1, wave_height = 1, period = 1)
+```
